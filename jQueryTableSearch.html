@@ -1,0 +1,214 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+ <title>Table Search</title>
+ <link rel="stylesheet" type="text/css" href="css/screen.css" />
+ <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+ <!--[if IE]>
+   <link rel="stylesheet" href="css/ie.css" type="text/css" media="screen, projection" />
+ <![endif]-->
+</head>
+<body>
+<div id="container" class="container">
+ <div id="content">
+   <form action="/performAction.do" method="POST">
+     <h2>Non Ajax-based</h2>
+     <table id="items" class="editable">
+       <thead>
+       <tr>
+         <th></th>
+         <th class="header">Header Data 1</th>
+         <th class="header">Header Data 2</th>
+         <th class="header">Header Data 3</th>
+       </tr>
+       <tr>
+         <th></th>
+         <th>
+           <input type="hidden" class="searchby" value="data1" />
+           <input type="text" class="livesearch" />
+           <a href="#" class="clear prepend-light-1">clear</a>
+         </th>
+         <th>
+           <input type="hidden" class="searchby" value="data2" />
+           <input type="text" class="livesearch" />
+           <a href="#" class="clear prepend-light-1">clear</a>
+         </th>
+         <th>
+           <input type="hidden" class="searchby" value="data3" />
+           <input type="text" class="livesearch" />
+           <a href="#" class="clear prepend-light-1">clear</a>
+         </th>
+       </tr>
+       </thead>
+       <tr class="row editable">
+         <td class="nonedit">
+           <input type="checkbox" />
+           <input type="hidden" name="id" value="1" />
+           <input type="hidden" name="key" value="a something" />
+         </td>
+         <td class="data1">data 1 row 1</td>
+         <td class="data2">data 2 row 1</td>
+         <td class="data3">data 3 row 1</td>
+       </tr>
+       <tr class="row editable">
+         <td class="nonedit">
+           <input type="checkbox" />
+           <input type="hidden" name="id" value="2" />
+           <input type="hidden" name="key" value="not a something" />
+         </td>
+         <td class="data1">data 1 row 2</td>
+         <td class="data2">data 2 row 2</td>
+         <td class="data3">data 3 row 2</td>
+       </tr>
+       <tr class="row editable">
+         <td class="nonedit">
+           <input type="checkbox" />
+           <input type="hidden" name="id" value="1" />
+           <input type="hidden" name="key" value="a something" />
+         </td>
+         <td class="data1">data 1 row 3</td>
+         <td class="data2">data 2 row 3</td>
+         <td class="data3">data 3 row 3</td>
+       </tr>
+       <tr class="row editable">
+         <td class="nonedit">
+           <input type="checkbox" />
+           <input type="hidden" name="id" value="2" />
+           <input type="hidden" name="key" value="not a something" />
+         </td>
+         <td class="data1">data 1 row 4</td>
+         <td class="data2">data 2 row 4</td>
+         <td class="data3">data 3 row 4</td>
+       </tr>
+       <tr class="row editable">
+         <td class="nonedit">
+           <input type="checkbox" />
+           <input type="hidden" name="id" value="1" />
+           <input type="hidden" name="key" value="a something" />
+         </td>
+         <td class="data1">data 1 row 5</td>
+         <td class="data2">data 2 row 5</td>
+         <td class="data3">data 3 row 5</td>
+       </tr>
+       <tr class="row editable">
+         <td class="nonedit">
+           <input type="checkbox" />
+           <input type="hidden" name="id" value="2" />
+           <input type="hidden" name="key" value="not a something" />
+         </td>
+         <td class="data1">data 1 row 6</td>
+         <td class="data2">data 2 row 6</td>
+         <td class="data3">data 3 row 6</td>
+       </tr>
+       <tr class="row editable">
+         <td class="nonedit">
+           <input type="checkbox" />
+           <input type="hidden" name="id" value="1" />
+           <input type="hidden" name="key" value="a something" />
+         </td>
+         <td class="data1">data 1 row 7</td>
+         <td class="data2">data 2 row 7</td>
+         <td class="data3">data 3 row 7</td>
+       </tr>
+       <tr class="row editable">
+         <td class="nonedit">
+           <input type="checkbox" />
+           <input type="hidden" name="id" value="2" />
+           <input type="hidden" name="key" value="not a something" />
+         </td>
+         <td class="data1">data 1 row 8</td>
+         <td class="data2">data 2 row 8</td>
+         <td class="data3">data 3 row 8</td>
+       </tr>
+       <tr class="row editable">
+         <td class="nonedit">
+           <input type="checkbox" />
+           <input type="hidden" name="id" value="2" />
+           <input type="hidden" name="key" value="not a something" />
+         </td>
+         <td class="data1">data 4 row 8</td>
+         <td class="data2">data 5 row 8</td>
+         <td class="data3">data 6 row 8</td>
+       </tr>
+       <tr class="row editable">
+         <td class="nonedit">
+           <input type="checkbox" />
+           <input type="hidden" name="id" value="2" />
+           <input type="hidden" name="key" value="not a something" />
+         </td>
+         <td class="data1">data 7 row 8</td>
+         <td class="data2">data 8 row 8</td>
+         <td class="data3">data 9 row 8</td>
+       </tr>
+     </table>
+   </form>
+ </div>
+ <hr />
+ <div id="footer">
+   designed by
+   <a href="http://davidwparker.com">David Parker</a>
+ </div>
+</div>
+<script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui-1.7.custom.min.js"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+$(function(){
+
+//click
+$(".clear").click(function(){
+ $(this).parent().find("input[type='text']").val("");
+ doSearch(false, ".livesearch");
+ return false;
+});
+
+//functions
+function doSearch(ajax, selector){
+ var vals = {};
+ //get all the current values and store them by searchby:value
+ $(selector).each(function(){
+   var $this = $(this), val = $this.val(), searchby = $this.parent().find(".searchby").val();
+   vals[searchby] = val;
+ });
+ if (ajax){
+
+   //ajax will return the latest data from the database and replace our values
+   alert('ajax');
+ }else{
+
+   //local will not hit the database but just show/hide rows from the current result set
+   //reveal all hidden rows, then re-apply the hide
+   $(".row").removeClass("hide");
+   for (var key in vals){
+     var theVal = vals[key];
+
+     $(".row td."+key).each(function(){
+       var $this = $(this);
+       if (theVal !== "" && ($this.html().search(theVal) === -1)){
+         $this.parents(".row").addClass("hide");
+       }
+     });
+   }
+ }
+}
+
+//JQuery Extensions
+jQuery.fn.extend({
+ performSearch: function(ajax, selector){
+   return this.each(function(){
+     var $this = $(this);
+     //every keyup
+     $this.keyup(function(){
+       doSearch(ajax, selector);
+     });
+   });
+ }
+});
+
+$(".livesearch").performSearch(false, ".livesearch");
+
+});
+/* ]]> */
+</script>
+</body>
+</html>

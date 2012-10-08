@@ -1,0 +1,227 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+ <title>ARMS UI Prototype</title>
+ <link rel="stylesheet" type="text/css" href="css/screen.css" />
+ <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+ <!--[if IE]>
+   <link rel="stylesheet" href="css/ie.css" type="text/css" media="screen, projection" />
+ <![endif]-->
+</head>
+<body>
+<div id="container" class="container">
+ <div id="header" class="prepend-1">
+   <h1><a href="index.html">ARMS UI Prototype</a></h1>
+ </div>
+ <hr />
+ <div id="content">
+   <div id="actions">
+     <span class="prepend-1 vcenter">Add a:</span>
+     <select id="addselect">
+       <option value="15">Person</option>
+     </select>
+     <input type="button" class="addbutton" value="Add!" />
+     <span class="prepend-1 vcenter">Perform Mass Action:</span>
+     <select id="massaction">
+       <option></option>
+       <option>copy</option>
+       <option>delete</option>
+     </select>
+     <input type="button" id="massbutton" value="Go!" />
+   </div>
+   <ul id="items"></ul>
+ </div>
+ <hr />
+ <div id="footer">
+   design by
+   <a href="http://davidwparker.com">David Parker</a>
+ </div>
+ <ul id="types" class="hide">
+   <li id="per" class="item detailed">
+     <strong>Name:</strong>
+     <input type="text" name="person[name]" class="text" />
+     <a class="detailslink" href="#">details</a>
+     <ul class="details hide">
+       <li>
+         <strong class="addone">Phone:</strong>
+         <ul class="phone">
+           <li class="masscopydelete">
+             <input type="text" name="person[phone]" class="text" />
+             <select>
+               <option>Home</option>
+               <option>Cell</option>
+               <option>Work</option>
+               <option>Other</option>
+             </select>
+           </li>
+         </ul>
+       </li>
+       <li>
+         <strong class="addone">EMail:</strong>
+         <ul class="email">
+           <li class="masscopydelete">
+             <input type="text" name="person[email]" class="text" />
+             <select>
+               <option>Home</option>
+               <option>Work</option>
+               <option>Other</option>
+             </select>
+           </li>
+         </ul>
+       </li>
+       <li>
+         <strong>Address:</strong><br />
+         <textarea cols="16" rows="5" name="person[address]" class="push-left-1 tall-2"></textarea>
+       </li>
+     </ul>
+   </li>
+ </ul>
+</div>
+<script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui-1.7.custom.min.js"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+$(document).ready(function(){
+//DYNAMIC HTML
+//add the copy, add another, and delete links, masscheck checkbox and arrow
+var addonelink = " <a class='addonelink' href='#'>add</a>",
+ copylink = " <a class='copy' href='#'>copy</a>",
+ deletelink = " <a class='delete' href='#'>delete</a>",
+ dragdropspan = "<span class='ui-icon ui-icon-arrowthick-2-n-s'></span>",
+ masscheck = "<input class='masscheck' type='checkbox' />",
+ checkalllink = " <a class='checkall' href='#'>check all</a>";
+$('#types .detailslink').after(copylink+deletelink);
+$('#types .masscopydelete').append(copylink+deletelink).prepend(masscheck);
+$('#types li.item').prepend(dragdropspan+masscheck);
+$('#types .addone').after(addonelink+checkalllink);
+
+//CLICK EVENTS
+//click for details section
+$('.detailslink').click(function(){
+ var $details = $(this).parent().find('.details');
+ if ($details.hasClass('hide'))
+   $details.slideDown().removeClass('hide');
+ else
+   $details.slideUp().addClass('hide');
+ return false;
+});
+
+//add button click events for which to clone
+$('.addbutton').click(function(){
+ var selected=$('#addselect option:selected').val(), $toAdd;
+ switch(parseInt(selected)){
+   case 15:$toAdd=$('#per').clone(true);break;
+ }
+ $toAdd.afterClone().appendTo('#items').removeFadeHide();
+});
+
+//copy click events for which to clone
+$('.copy').click(function(){
+ $(this).copyItems();
+
+ //renumber after copy
+ //currently not working...
+ $('#types li.item').each(function(i){
+   $(this).find('input,textarea,select').each(function(i){
+     var name = $(this).attr('name');
+     name = name.replace(/\d/gi,"");
+     $(this).attr('name', name + i);
+   });
+ });
+ return false;
+});
+
+//addone click events for which to clone
+$('.addonelink').click(function(){
+ var $this = $(this),
+   $ul = $this.parents('li:first').find('ul'),
+   klass = $ul.attr('class');
+ var $toCopy = $('#types .'+klass).find('li:first').clone(true).afterClone().appendTo($ul);
+ $this.parents('li:first').find('li:last').removeFadeHide();
+ return false;
+});
+
+//remove click events
+$('.delete').click(function(){
+ $(this).deleteItems();
+ return false;
+});
+
+//click for mass actions
+$('#massaction, .masscheck')
+ .change(function(){massDisabled();})
+ .click(function(){massDisabled();});
+$('#massbutton').click(function(){
+ if ($('#massaction option:selected').val() === 'delete')
+   $('.masscheck:checked').deleteItems();
+ else if ($('#massaction option:selected').val() === 'copy')
+   $('.masscheck:checked').copyItems();
+});
+
+//check all
+$('.checkall').click(function(){
+ $this = $(this);
+ if ($this.html() === 'check all'){
+   $this.parents('li:first').find('.masscheck').attr('checked','checked');
+   $this.html('uncheck all');
+ } else {
+   $this.parents('li:first').find('.masscheck').removeAttr('checked');
+   $this.html('check all');
+ }
+ massDisabled();
+ return false;
+});
+
+//JQUERY EXTENSIONS
+jQuery.fn.extend({
+ //actions for after cloning (normal stuff for hiding, removing id, to later fade in)
+ afterClone: function(){
+   return this.each(function(){$(this).addClass('hide').css({'display':''}).removeAttr('id');});
+ },
+ //Thoughts on Deleting items:
+ //  Deleting an item may ask to confirm deletion, but it should always provide a way to bring the item back.
+ //  Having a 'trash can' of deleted items (that stay for 7-30+ days) can be bliss for users.
+ //
+ //this could send an ajax request to perform a server side delete and/or have a popup to confirm deletion, etc.
+ //it currently only removes the item from the page.
+ deleteItems: function(){
+   return this.each(function(){
+     $(this).parents('li:first').fadeOut(function(){$(this).remove();massDisabled();});
+   });
+ },
+ copyItems: function(){
+   return this.each(function(){
+     $parent = $(this).parents('li:first');
+     //hack fix due to jquery bug not cloning textarea value in FF
+     $parent.find('textarea').each(function(){
+       $(this).text($(this).val());
+     });
+
+     var $toCopy = $parent.clone(true).afterClone().insertAfter($parent);
+     $parent.next().removeFadeHide();
+   });
+ },
+ //action to fade back in
+ removeFadeHide: function(){
+   return this.each(function(){$(this).fadeIn().removeClass('hide');});
+ }
+});
+
+//FUNCTIONS
+//mass actions
+function massDisabled(){
+ if ($('#massaction option:selected').val() === '' || $('.masscheck:checked').length === 0)
+   $('#massbutton').attr('disabled','disabled');
+ else
+   $('#massbutton').removeAttr('disabled');
+};
+massDisabled();
+
+//make the items sortable
+$('#items').sortable({'axis':'y','cursor':'n-resize','handle':'.ui-icon-arrowthick-2-n-s'});
+
+});
+/* ]]> */
+</script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+ <title>Google API/jQuery Ajax Site Search</title>
+ <link rel="stylesheet" type="text/css" href="css/screen.css" />
+ <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+ <!--[if IE]>
+   <link rel="stylesheet" href="css/ie.css" type="text/css" media="screen, projection" />
+ <![endif]-->
+ <style>
+   td.gsc-input{width:50px;}
+ </style>
+</head>
+<body>
+<div id="container" class="container">
+ <div>
+   <span class="text">search without google container</span><input type="text" class="noi text" />
+ </div>
+ <ul id="no">
+ </ul>
+ <hr />
+
+ <div>
+   <span class="text">http://</span><input type="text" class="sitetosearch text" value="davidwparker.com" />
+ </div>
+ <hr />
+
+ <div id="results">
+ </div>
+ <hr />
+
+ <div id="footer">
+   design by
+   <a href="http://davidwparker.com">David Parker</a>
+ </div>
+</div>
+<script src='http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js'></script>
+<script src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js'></script>
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<script language="Javascript" type="text/javascript">
+//<![CDATA[
+$(function(){
+  $('input.noi').focus();
+  $('input.noi').keyup(function(){
+    var val = $(this).val();
+    $.ajax({
+      type:"GET",
+      url:"http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q="+val+"&callback=processResults",
+      dataType:"jsonp"
+    });
+  });
+})
+function processResults(data){
+ $("#no").empty();
+ for (var i = 0; i < data.responseData.results.length; i++){
+   result = data.responseData.results[i];
+   $("#no").append("<li>"+result.content+"</li>");
+ }
+}
+
+var domain = "davidwparker.com";
+google.load('search', '1');
+
+function performSearch(jq) {
+ $('#results').empty();
+ if(jq != '[object Event]')
+   domain = jq;
+ var searchControl = new google.search.SearchControl(),
+   options = new google.search.SearcherOptions(),
+   siteSearch = new google.search.WebSearch();
+ options.setExpandMode(google.search.SearchControl.EXPAND_MODE_OPEN);
+
+ // site restricted web search using a custom search engine
+ siteSearch.setUserDefinedLabel(domain);
+ siteSearch.setUserDefinedClassSuffix("siteSearch");
+ siteSearch.setSiteRestriction(domain);
+ searchControl.addSearcher(siteSearch, options);
+
+ // tell the searcher to draw itself and tell it where to attach
+ searchControl.draw(document.getElementById("results"));
+
+ //manipulate it
+ $('.gsc-control').removeClass('gsc-control');
+ $('.gsc-branding').hide();
+ $('.gsc-cursor-box, .gsc-search-button').remove();
+ $('input.gsc-input').keyup(function(){
+   searchControl.execute($(this).val());
+ });
+}
+
+$('.sitetosearch').keyup(function(){
+ performSearch($(this).val());
+});
+
+google.setOnLoadCallback(performSearch);
+/* ]]> */
+</script>
+</body>
+</html>
